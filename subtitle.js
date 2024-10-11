@@ -67,7 +67,7 @@
                 const subtitleButton = document.querySelector('.bpx-player-ctrl-btn.bpx-player-ctrl-subtitle[aria-label="字幕"] .bpx-player-ctrl-btn-icon .bpx-common-svg-icon');
 
                 // 检测字幕filter是否存在，来判断字幕是否开启
-                const subtitleFilter = document.querySelector('.bpx-common-svg-icon filter[id^="__lottie_element_"]');
+                const subtitleFilter = document.querySelector('.bpx-player-ctrl-btn.bpx-player-ctrl-subtitle[aria-label="字幕"] .bpx-player-ctrl-btn-icon .bpx-common-svg-icon filter[id^="__lottie_element_"]');
                 if (subtitleFilter) {
                     console.log('字幕已开启！');
                     clearInterval(interval);
