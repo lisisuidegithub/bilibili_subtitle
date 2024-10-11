@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         自动打开哔哩哔哩字幕
 // @namespace    http://tampermonkey.net/
-// @version      1.7
+// @version      1.8
 // @description  自动打开哔哩哔哩字幕，只在有播放列表时开启，方便看课程，不需要每次都点击字幕
 // @author       lisisuidegithub
 // @match        https://www.bilibili.com/video/*
