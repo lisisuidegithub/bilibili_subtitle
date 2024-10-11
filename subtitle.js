@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         自动打开哔哩哔哩字幕
 // @namespace    http://tampermonkey.net/
-// @version      1.5
+// @version      1.7
 // @description  自动打开哔哩哔哩字幕，只在有播放列表时开启，方便看课程，不需要每次都点击字幕
 // @author       lisisuidegithub
 // @match        https://www.bilibili.com/video/*
@@ -13,7 +13,6 @@
 (function() {
     'use strict';
 
-    let subtitleOpened = false; // 增加标志位，确保只点击一次字幕按钮
     let interval; // 声明轮询变量
 
     // 等待页面完全加载完毕后执行脚本
@@ -59,21 +58,17 @@
             interval = setInterval(() => {
                 const subtitleButton = document.querySelector('.bpx-player-ctrl-btn.bpx-player-ctrl-subtitle[aria-label="字幕"] .bpx-player-ctrl-btn-icon .bpx-common-svg-icon');
 
-                if (subtitleButton && !subtitleOpened) { // 判断字幕是否已开启
-                    console.log('找到字幕按钮，正在点击...');
-                    subtitleButton.click(); // 点击字幕按钮
-                    subtitleOpened = true; // 设置标志位，表示字幕已开启
-                    clearInterval(interval); // 找到字幕按钮后停止轮询
-                    console.log('字幕已开启，停止轮询');
-                } else {
-                    attempts++;
-                    console.log(`尝试 ${attempts} 次，还未找到字幕按钮`);
-
-                    if (attempts >= maxAttempts) {
-                        clearInterval(interval); // 超过最大尝试次数后停止轮询
-                        console.log('超过最大尝试次数，未找到字幕按钮');
-                    }
+                // 检测字幕filter是否存在，来判断字幕是否开启
+                const subtitleFilter = document.querySelector('filter[id^="__lottie_element_"]');
+                if (subtitleFilter) {
+                    console.log('字幕已开启！');
+                    clearInterval(interval);
                 }
+
+                subtitleButton.click(); // 点击字幕按钮
+                console.log('字幕已开启，停止轮询');
+                clearInterval(interval);
+                
             }, 1000); // 每秒检测一次字幕按钮
         }
     };
