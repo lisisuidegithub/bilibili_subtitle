@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         自动打开哔哩哔哩字幕
 // @namespace    http://tampermonkey.net/
-// @version      1.8
+// @version      1.9
 // @description  自动打开哔哩哔哩字幕，只在有播放列表时开启，方便看课程，不需要每次都点击字幕
 // @author       lisisuidegithub
 // @match        https://www.bilibili.com/video/*
@@ -57,10 +57,12 @@
             let attempts = 0;
 
             interval = setInterval(() => {
+                attempts++;
+                console.log(`第${attempts}次尝试`)
                 if (attempts >= maxAttempts) {
                     console.log('尝试次数过多，停止轮询');
+                    console.log('不存在字幕');
                     clearInterval(interval);
-                    return;
                 }
                 const subtitleButton = document.querySelector('.bpx-player-ctrl-btn.bpx-player-ctrl-subtitle[aria-label="字幕"] .bpx-player-ctrl-btn-icon .bpx-common-svg-icon');
 
@@ -72,7 +74,6 @@
                 }
 
                 subtitleButton.click(); // 点击字幕按钮
-                attempts++;
 
             }, 1000); // 每秒检测一次字幕按钮
         }
