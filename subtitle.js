@@ -8,6 +8,8 @@
 // @icon         https://i0.hdslb.com/bfs/static/jinkela/long/images/favicon.ico
 // @grant        none
 // @license MIT
+// @downloadURL https://update.greasyfork.org/scripts/509684/%E8%87%AA%E5%8A%A8%E6%89%93%E5%BC%80%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9%E5%AD%97%E5%B9%95.user.js
+// @updateURL https://update.greasyfork.org/scripts/509684/%E8%87%AA%E5%8A%A8%E6%89%93%E5%BC%80%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9%E5%AD%97%E5%B9%95.meta.js
 // ==/UserScript==
 
 (function() {
@@ -31,7 +33,6 @@
                 console.log('URL发生变化');
                 lastUrl = currentUrl; // 更新上一个 URL
 
-                subtitleOpened = false; // 重置标志位
                 clearInterval(interval); // 停止当前轮询
                 checkAndOpenSubtitle(); // 重新检测播放列表和字幕
             }
@@ -56,19 +57,23 @@
             let attempts = 0;
 
             interval = setInterval(() => {
+                if (attempts >= maxAttempts) {
+                    console.log('尝试次数过多，停止轮询');
+                    clearInterval(interval);
+                    return;
+                }
                 const subtitleButton = document.querySelector('.bpx-player-ctrl-btn.bpx-player-ctrl-subtitle[aria-label="字幕"] .bpx-player-ctrl-btn-icon .bpx-common-svg-icon');
 
                 // 检测字幕filter是否存在，来判断字幕是否开启
-                const subtitleFilter = document.querySelector('filter[id^="__lottie_element_"]');
+                const subtitleFilter = document.querySelector('.bpx-common-svg-icon filter[id^="__lottie_element_"]');
                 if (subtitleFilter) {
                     console.log('字幕已开启！');
                     clearInterval(interval);
                 }
 
                 subtitleButton.click(); // 点击字幕按钮
-                console.log('字幕已开启，停止轮询');
-                clearInterval(interval);
-                
+                attempts++;
+
             }, 1000); // 每秒检测一次字幕按钮
         }
     };
